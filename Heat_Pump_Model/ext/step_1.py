@@ -11,20 +11,19 @@ from tespy.networks import Network
 
 # %% network
 
+#Define the refrigerant and the units
 nw = Network(fluids=['water', 'NH3'], T_unit='C', p_unit='bar',
              h_unit='kJ / kg', m_unit='kg / s')
 
 # %% components
 
 # sources & sinks
-
 c_in = Source('coolant in')
 cons_closer = CycleCloser('consumer cycle closer')
 
 va = Sink('valve')
 
 # consumer system
-
 cd = Condenser('condenser')
 rp = Pump('recirculation pump')
 cons = HeatExchangerSimple('consumer')
