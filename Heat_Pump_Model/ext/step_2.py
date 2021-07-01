@@ -10,6 +10,7 @@ from tespy.components import Sink
 from tespy.components import Source
 from tespy.components import Valve
 from tespy.connections import Connection
+
 from tespy.connections import Ref
 from tespy.networks import Network
 from tespy.tools.characteristics import CharLine
@@ -17,7 +18,7 @@ from tespy.tools.characteristics import load_default_char as ldc
 
 # %% network
 
-nw = Network(fluids=['water', 'NH3'], T_unit='C', p_unit='bar',
+nw = Network(fluids=['water', 'CO2'], T_unit='C', p_unit='bar',
              h_unit='kJ / kg', m_unit='kg / s')
 
 # %% components
@@ -91,7 +92,7 @@ nw.add_conns(su_cp1)
 
 # condenser system
 
-cd.set_attr(pr1=0.99, pr2=0.99, ttd_u=5, design=['pr2', 'ttd_u'],
+cd.set_attr(pr1=0.99, pr2=0.99, ttd_u=20, design=['pr2', 'ttd_u'],
             offdesign=['zeta2', 'kA_char'])
 rp.set_attr(eta_s=0.8, design=['eta_s'], offdesign=['eta_s_char'])
 cons.set_attr(pr=0.99, design=['pr'], offdesign=['zeta'])
@@ -101,10 +102,10 @@ cons.set_attr(pr=0.99, design=['pr'], offdesign=['zeta'])
 kA_char1 = ldc('heat exchanger', 'kA_char1', 'DEFAULT', CharLine)
 kA_char2 = ldc('heat exchanger', 'kA_char2', 'EVAPORATING FLUID', CharLine)
 
-ev.set_attr(pr1=0.99, pr2=0.99, ttd_l=5,
+ev.set_attr(pr1=0.99, pr2=0.99, ttd_l=20,
             kA_char1=kA_char1, kA_char2=kA_char2,
             design=['pr1', 'ttd_l'], offdesign=['zeta1', 'kA_char'])
-su.set_attr(pr1=0.99, pr2=0.99, ttd_u=2, design=['pr1', 'pr2', 'ttd_u'],
+su.set_attr(pr1=0.99, pr2=0.99, ttd_u=20, design=['pr1', 'pr2', 'ttd_u'],
             offdesign=['zeta1', 'zeta2', 'kA_char'])
 pu.set_attr(eta_s=0.8, design=['eta_s'], offdesign=['eta_s_char'])
 
@@ -112,8 +113,8 @@ pu.set_attr(eta_s=0.8, design=['eta_s'], offdesign=['eta_s_char'])
 
 # condenser system
 
-c_in_cd.set_attr(T=170, fluid={'water': 0, 'NH3': 1})
-close_rp.set_attr(T=60, p=10, fluid={'water': 1, 'NH3': 0})
+c_in_cd.set_attr(T=170, fluid={'water': 0, 'CO2': 1})
+close_rp.set_attr(T=60, p=10, fluid={'water': 1, 'CO2': 0})
 cd_cons.set_attr(T=90)
 
 # evaporator system cold side
@@ -123,7 +124,7 @@ su_cp1.set_attr(state='g')
 
 # evaporator system hot side
 
-amb_in_su.set_attr(T=12, p=1, fluid={'water': 1, 'NH3': 0})
+amb_in_su.set_attr(T=12, p=1, fluid={'water': 1, 'CO2': 0})
 ev_amb_out.set_attr(T=9)
 
 # %% key paramter
